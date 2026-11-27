@@ -7,7 +7,7 @@
 :root {
   --bg: #EDF1EA; --surface: #F9FBF6; --fg: #1B2622; --muted: #5C6B64; --line: #CFD8CF;
   --accent: #0B6E60; --accent-fg: #FFFFFF;
-  --hot: #E89B00; --hot-soft: #FBE7B8; --hot-fg: #2A1C00;
+  --hot: #E89B00; --hot-soft: #FBE7B8; --hot-fg: #2A1C00; --good: #1E8E4E;
   --wood-1: #8E5932; --wood-2: #5E3519; --bridge: #2B2F31;
   --steel-1: #F4F6F7; --steel-2: #A9B2B7; --tine-fg: #2A3033;
   --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
@@ -17,7 +17,7 @@
   :root:not([data-theme="light"]) {
     --bg: #121816; --surface: #1B2320; --fg: #E7ECE6; --muted: #93A29A; --line: #2C3833;
     --accent: #56CDB4; --accent-fg: #06241E;
-    --hot: #FFBE2E; --hot-soft: #4A3A10; --hot-fg: #2A1C00;
+    --hot: #FFBE2E; --hot-soft: #4A3A10; --hot-fg: #2A1C00; --good: #5BD68A;
     --wood-1: #6B3F22; --wood-2: #3A1F0F; --bridge: #0E1011;
     --steel-1: #DDE2E5; --steel-2: #8A9399; --tine-fg: #1D2224;
     color-scheme: dark;
@@ -26,7 +26,7 @@
 :root[data-theme="dark"] {
   --bg: #121816; --surface: #1B2320; --fg: #E7ECE6; --muted: #93A29A; --line: #2C3833;
   --accent: #56CDB4; --accent-fg: #06241E;
-  --hot: #FFBE2E; --hot-soft: #4A3A10; --hot-fg: #2A1C00;
+  --hot: #FFBE2E; --hot-soft: #4A3A10; --hot-fg: #2A1C00; --good: #5BD68A;
   --wood-1: #6B3F22; --wood-2: #3A1F0F; --bridge: #0E1011;
   --steel-1: #DDE2E5; --steel-2: #8A9399; --tine-fg: #1D2224;
   color-scheme: dark;
@@ -128,16 +128,94 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 @keyframes shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
 @media (prefers-reduced-motion: reduce) { .tine.next .bar, .tine.miss .bar { animation: none; } .progress i { transition: none; } }
 @media (max-height: 520px) { .chip { height: 40px; } .controls { padding-block: 4px; } .ctl { min-height: 44px; } }
+
+/* ---------- Home, tuner, course ---------- */
+.page { overflow-y: auto; }
+.page-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.page-head h1 { font-family: var(--display); font-weight: 700; font-size: 1.6rem; line-height: 1.1; margin: 0; }
+.home-cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.home-card { display: flex; align-items: center; gap: 14px; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px 16px; min-height: 92px; }
+.home-card svg { width: 34px; height: 34px; flex: none; color: var(--accent); }
+.home-card strong { font-family: var(--display); font-size: 1.25rem; display: block; }
+.home-card small { color: var(--muted); font-size: 0.9rem; display: block; }
+.tuner-body { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.tuner-note { font-family: var(--display); font-weight: 700; font-size: 4rem; line-height: 1; min-height: 1em; }
+.tuner-sub { color: var(--muted); min-height: 1.4em; font-variant-numeric: tabular-nums; text-align: center; }
+.meter { position: relative; height: 46px; width: 100%; max-width: 420px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); overflow: hidden; }
+.meter .zone { position: absolute; left: 45%; width: 10%; top: 0; bottom: 0; background: var(--good); opacity: .28; }
+.meter .mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--muted); }
+.meter .needle { position: absolute; top: 4px; bottom: 4px; left: 50%; width: 5px; margin-left: -2.5px; border-radius: 3px; background: var(--fg); transition: left .12s; }
+.meter.ok .needle { background: var(--good); }
+.meter-scale { display: flex; justify-content: space-between; width: 100%; max-width: 420px; color: var(--muted); font-size: 0.75rem; }
+.tuner-advice { min-height: 3em; text-align: center; max-width: 40ch; margin: 0; }
+.tstrip { display: flex; gap: 2px; align-items: flex-start; height: 150px; width: 100%; max-width: 520px; background: linear-gradient(180deg, var(--wood-1), var(--wood-2)); border-radius: 14px; padding: 10px 10px 8px; }
+.tstrip > * { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; background: none; display: flex; align-items: flex-start; }
+.tstrip .bar { width: 100%; height: var(--len); border-radius: 2px 2px 999px 999px; background: linear-gradient(90deg, var(--steel-2), var(--steel-1) 45%, var(--steel-2)); color: var(--tine-fg); display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 7px; line-height: 1; font-size: 0.6rem; }
+.tstrip .bar b { font-family: var(--display); font-size: 0.8rem; }
+.tstrip .dots { font-size: 8px; height: 8px; }
+.tstrip .ok .bar { box-shadow: inset 0 -7px 0 var(--good); }
+.tstrip .cur .bar, .tstrip .hi .bar { background: var(--hot); color: var(--hot-fg); }
+.tstrip .lock .bar { outline: 3px solid var(--accent); outline-offset: -1px; }
+.lesson { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-direction: column; gap: 10px; }
+.lesson .step { color: var(--accent); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; }
+.lesson h2 { font-family: var(--display); font-weight: 700; font-size: 1.25rem; margin: 0; text-wrap: balance; }
+.lesson p { margin: 0; max-width: 60ch; }
+.lesson .row { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (prefers-reduced-motion: reduce) { .meter .needle { transition: none; } }
 </style>
 
-<div id="library" class="view">
+<div id="home" class="view page">
   <div class="lib-inner gutter">
     <header class="lib-head">
       <h1>Kalimba Songbook</h1>
-      <p>For a 17-key kalimba tuned in C. Pick a tune and the key to play next lights up. Tap it on screen, or tap Follow me and the app uses the microphone to keep up as you pluck your own kalimba. Hear song plays the tune for you.</p>
+      <p>For a 17-key kalimba tuned in C.</p>
       <div class="tuning" id="tuning" aria-hidden="true"></div>
     </header>
+    <div class="home-cards">
+      <button class="home-card" data-go="tuner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17a8 8 0 0116 0"/><path d="M12 17l4-7"/><path d="M12 5v2M5.6 8.6l1.4 1.4M18.4 8.6L17 10"/></svg><span><strong>Tuner</strong><small>Check each key against its note</small></span></button>
+      <button class="home-card" data-go="course"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h6a2 2 0 012 2v12a2 2 0 00-2-2H4zM20 5h-6a2 2 0 00-2 2v12a2 2 0 012-2h6z"/></svg><span><strong>Beginner's course</strong><small>Six short lessons, from holding it to your first tunes</small></span></button>
+      <button class="home-card" data-go="library"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg><span><strong>Songbook</strong><small>36 tunes with light-up keys</small></span></button>
+    </div>
+  </div>
+</div>
+
+<div id="library" class="view" hidden>
+  <div class="lib-inner gutter">
+    <header class="lib-head">
+      <div class="page-head"><button class="icon-btn" data-go="home" aria-label="Back to home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1>Songbook</h1></div>
+      <p>Pick a tune and the key to play next lights up. Tap it on screen, or tap Follow me and the app uses the microphone to keep up as you pluck your own kalimba. Hear song plays the tune for you.</p>
+    </header>
     <div id="cats"></div>
+  </div>
+</div>
+
+<div id="tuner" class="view page" hidden>
+  <div class="lib-inner gutter">
+    <header class="lib-head">
+      <div class="page-head"><button class="icon-btn" data-go="home" aria-label="Back to home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1>Tuner</h1></div>
+      <p>Start the tuner, then pluck one key at a time and let it ring. Tap a key below to hear the right note and check only that key.</p>
+    </header>
+    <div class="tuner-body">
+      <button class="pill" id="btn-tuner">Start tuner</button>
+      <p class="mic-help" id="tuner-help" hidden>The tuner needs the microphone, which this page is not allowed to use. Open the web version in Chrome: <a href="https://kylestockton9.github.io/kalimba-songbook/" target="_blank" rel="noopener">kylestockton9.github.io/kalimba-songbook</a></p>
+      <div class="tuner-note" id="t-note">–</div>
+      <div class="tuner-sub" id="t-sub">Not listening yet</div>
+      <div class="meter" id="t-meter"><i class="zone"></i><i class="mid"></i><i class="needle" id="t-needle"></i></div>
+      <div class="meter-scale" aria-hidden="true"><span>too low</span><span>in tune</span><span>too high</span></div>
+      <p class="tuner-advice" id="t-advice"></p>
+      <div class="tstrip" id="tstrip"></div>
+      <div class="tuner-sub" id="t-count">0 of 17 keys checked in tune</div>
+    </div>
+  </div>
+</div>
+
+<div id="course" class="view page" hidden>
+  <div class="lib-inner gutter">
+    <header class="lib-head">
+      <div class="page-head"><button class="icon-btn" data-go="home" aria-label="Back to home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1>Beginner's course</h1></div>
+      <p>Six short lessons. Each takes a few minutes; the practice buttons open the matching exercise or tune.</p>
+    </header>
+    <div id="lessons" style="display:flex;flex-direction:column;gap:22px"></div>
   </div>
 </div>
 
@@ -428,7 +506,8 @@ function openSong(i) {
   sc.appendChild(done);
   done.querySelector("#again").addEventListener("click", () => jump(0));
   done.querySelector("#nextsong").addEventListener("click", () => openSong((songIndex + 1) % SONGS.length));
-  $("library").hidden = true; $("player").hidden = false;
+  if ($("player").hidden) returnTo = $("course").hidden ? "library" : "course";
+  show("player");
   sc.scrollTop = 0; update();
   try { navigator.wakeLock && navigator.wakeLock.request("screen").then(w => { wake = w; }).catch(() => {}); } catch (e) {}
 }
@@ -441,7 +520,7 @@ function showPos() {
 function closeSong() {
   stop(); stopListening(); micNote = ""; song = null; $("mic-help").hidden = true;
   try { wake && wake.release(); } catch (e) {} wake = null;
-  $("player").hidden = true; $("library").hidden = false; renderLibrary();
+  show(returnTo);
 }
 function update() {
   const N = song.notes.length;
@@ -535,8 +614,162 @@ $("btn-listen").addEventListener("click", () => {
   if (!canListen) { $("mic-help").hidden = !$("mic-help").hidden; return; }
   listening ? stopListening() : startListening();
 });
-document.addEventListener("visibilitychange", () => { if (document.hidden) { if (playing) stop(); stopListening(); } });
+document.addEventListener("visibilitychange", () => { if (document.hidden) { if (playing) stop(); stopListening(); stopTuner(); } });
 
-renderLibrary();
+// ---------- navigation ----------
+const VIEWS = ["home", "library", "tuner", "course", "player"];
+let returnTo = "library";
+function show(id) {
+  VIEWS.forEach(v => { $(v).hidden = v !== id; });
+  if (id !== "tuner") stopTuner();
+  if (id === "library") renderLibrary();
+}
+document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => show(b.dataset.go)));
+
+// A small picture of the 17 keys, used by the tuner and the course.
+function miniBoard(host, tag, onTap) {
+  return TINES.map((n, i) => {
+    const el = document.createElement(tag);
+    el.style.setProperty("--len", (100 - Math.abs(i - 8) * 5.5) + "%");
+    el.innerHTML = '<span class="bar"><span class="dots">' + dots(n) + '</span><b>' + degree(n) + '</b>' + n[0] + '</span>';
+    if (onTap) { el.setAttribute("aria-label", n); el.addEventListener("click", () => onTap(i)); }
+    host.appendChild(el);
+    return el;
+  });
+}
+
+// ---------- tuner ----------
+let tunerOn = false, tStream = null, tSrc = null, tAn = null, tTimer = null, tBuf = null, tLock = -1, tHist = [], tOkRun = 0, tMiss = 0, tCur = -1;
+const tuned = new Array(17).fill(false);
+const tEls = miniBoard($("tstrip"), "button", i => {
+  tLock = tLock === i ? -1 : i; tHist = []; tOkRun = 0;
+  if (tLock >= 0) pluck(TINES[i]);
+  paintStrip();
+  $("t-advice").textContent = tLock >= 0 ? "Checking only " + TINES[i][0] + TINES[i][1] + " (key " + degree(TINES[i]) + "). Tap it again to go back to automatic." : "";
+});
+function paintStrip() {
+  tEls.forEach((el, i) => { el.classList.toggle("ok", tuned[i]); el.classList.toggle("cur", i === tCur); el.classList.toggle("lock", i === tLock); });
+  $("t-count").textContent = tuned.filter(Boolean).length + " of 17 keys checked in tune";
+}
+let pitchWin = null;
+// Finds the pitch of one ringing note by measuring how long the sound wave takes to repeat.
+function detectPitch(b, sr) {
+  const n = b.length;
+  let e = 0; for (let i = 0; i < n; i++) e += b[i] * b[i];
+  if (Math.sqrt(e / n) < 0.003) return null;
+  const minLag = Math.floor(sr / 1450), maxLag = Math.ceil(sr / 235), W = n - maxLag - 2;
+  const nsdf = new Float32Array(maxLag + 3);
+  const at = lag => { let a = 0, m = 0; for (let i = 0; i < W; i++) { const x = b[i], y = b[i + lag]; a += x * y; m += x * x + y * y; } return m > 0 ? 2 * a / m : 0; };
+  let max = 0;
+  for (let lag = minLag - 1; lag <= maxLag + 1; lag++) { nsdf[lag] = at(lag); if (lag >= minLag && lag <= maxLag && nsdf[lag] > max) max = nsdf[lag]; }
+  if (max < 0.6) return null;
+  let p = -1;
+  for (let lag = minLag; lag <= maxLag; lag++) if (nsdf[lag] > 0.9 * max && nsdf[lag] >= nsdf[lag - 1] && nsdf[lag] >= nsdf[lag + 1]) { p = lag; break; }
+  if (p < 0) return null;
+  const refine = lag => { const a = nsdf[lag - 1], c = nsdf[lag], d = nsdf[lag + 1], den = a - 2 * c + d; return lag + (den ? 0.5 * (a - d) / den : 0); };
+  const rough = sr / refine(p);
+  // The wave-repeat reading is coarse for high notes. Sharpen it by finding the exact frequency where the sound is strongest nearby.
+  if (!pitchWin || pitchWin.length !== n) { pitchWin = new Float32Array(n); for (let i = 0; i < n; i++) pitchWin[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (n - 1)); }
+  const power = f => { const w = 2 * Math.PI * f / sr, c = 2 * Math.cos(w); let s1 = 0, s2 = 0; for (let i = 0; i < n; i++) { const v = b[i] * pitchWin[i] + c * s1 - s2; s2 = s1; s1 = v; } return s1 * s1 + s2 * s2 - c * s1 * s2; };
+  let lo = rough * 0.97, hi = rough * 1.03;
+  for (let it = 0; it < 24; it++) { const a = lo + (hi - lo) / 3, d = hi - (hi - lo) / 3; if (power(a) < power(d)) lo = a; else hi = d; }
+  return (lo + hi) / 2;
+}
+function tunerTick() {
+  tAn.getFloatTimeDomainData(tBuf);
+  const f = detectPitch(tBuf, ac.sampleRate);
+  if (!f) { if (++tMiss === 12) { tHist = []; tOkRun = 0; tCur = -1; paintStrip(); $("t-sub").textContent = "Pluck a key and let it ring"; $("t-meter").classList.remove("ok"); } return; }
+  tMiss = 0; tHist.push(f); if (tHist.length > 5) tHist.shift();
+  showReading(tHist.slice().sort((a, b) => a - b)[tHist.length >> 1]);
+}
+function showReading(f) {
+  let near = 0, nc = Infinity;
+  TINES.forEach((n, i) => { const c = Math.abs(1200 * Math.log2(f / freq(n))); if (c < nc) { nc = c; near = i; } });
+  const i = tLock >= 0 ? tLock : near, n = TINES[i], c = 1200 * Math.log2(f / freq(n));
+  const ok = Math.abs(c) <= 5;
+  tCur = i;
+  $("t-note").textContent = n[0] + n[1];
+  $("t-sub").textContent = "Key " + degree(n) + (dots(n) ? " " + dots(n) : "") + " · " + f.toFixed(1) + " Hz · " + (c >= 0 ? "+" : "−") + Math.abs(c).toFixed(0) + " cents";
+  $("t-needle").style.left = (50 + Math.max(-50, Math.min(50, c))) + "%";
+  $("t-meter").classList.toggle("ok", ok);
+  let advice;
+  if (tLock >= 0 && near !== tLock && Math.abs(c) > 80) advice = "That sounds closer to " + TINES[near][0] + TINES[near][1] + ". Pluck the " + n[0] + n[1] + " key, or tap it below again to go back to automatic.";
+  else if (ok) advice = "In tune.";
+  else if (c < 0) advice = "Too low. Tap the playing end of the key up toward the bridge to shorten it a touch.";
+  else advice = "Too high. Tap the top end of the key down to lengthen it a touch.";
+  $("t-advice").textContent = advice;
+  if (ok) { if (++tOkRun >= 3) tuned[i] = true; } else tOkRun = 0;
+  paintStrip();
+}
+async function startTuner() {
+  stop(); stopListening();
+  try {
+    ensureAudio(); await ac.resume();
+    tStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+  } catch (e) { $("t-sub").textContent = "Microphone is blocked. Allow it in the browser's site settings, then start again."; return; }
+  tSrc = ac.createMediaStreamSource(tStream);
+  tAn = ac.createAnalyser(); tAn.fftSize = 4096; tAn.smoothingTimeConstant = 0; tSrc.connect(tAn);
+  tBuf = new Float32Array(tAn.fftSize); tHist = []; tMiss = 0;
+  tTimer = setInterval(tunerTick, 80);
+  tunerOn = true; $("btn-tuner").textContent = "Stop tuner"; $("t-sub").textContent = "Pluck a key and let it ring";
+}
+function stopTuner() {
+  if (!tunerOn) return;
+  clearInterval(tTimer);
+  try { tSrc.disconnect(); tStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+  tunerOn = false; tStream = tSrc = tAn = null; tCur = -1; paintStrip();
+  $("btn-tuner").textContent = "Start tuner"; $("t-sub").textContent = "Not listening"; $("t-note").textContent = "–";
+}
+$("btn-tuner").addEventListener("click", () => {
+  if (!canListen) { $("tuner-help").hidden = !$("tuner-help").hidden; return; }
+  tunerOn ? stopTuner() : startTuner();
+});
+
+// ---------- beginner's course ----------
+const LESSONS = [
+  { t: "Hold it and find your way around", fig: true, p: [
+    "Hold the kalimba in both hands with your thumbs resting over the keys and your fingers wrapped around the back.",
+    "The longest key, in the middle, is the lowest note: C. From there the notes climb by swapping sides. The next note up is just left of centre, the one after that just right of centre, and so on outward. The short keys at the edges are the highest notes." ] },
+  { t: "Pluck a clean note", p: [
+    "Use the tip of your thumbnail, not the pad of your thumb. Press the end of the key down a little and let your nail slide off the tip so the key springs free.",
+    "Keep your thumbs loose. A light flick rings longer than a hard push. If a note buzzes or sounds dull, you are probably brushing the key beside it.",
+    "Practice: pluck the centre key eight times and aim for the same loudness every time. Then do the same on the key either side of it." ] },
+  { t: "Read the numbers", fig: true, p: [
+    "Kalimba music is usually written in numbers. 1 to 7 are the notes of the scale: C, D, E, F, G, A, B, the same as do, re, mi, fa, sol, la, ti.",
+    "A dot above a number means the same note one octave higher. Two dots means two octaves higher. Most kalimbas have these numbers and letters engraved on the keys, and this app shows them on every key and every note." ] },
+  { t: "Climb the scale", p: [
+    "Because the notes swap sides, you play a scale by swapping thumbs: centre, left, right, left, right, moving outward as you go up.",
+    "Go slowly and keep it even. Speed comes on its own once your thumbs know where the keys are." ],
+    go: ["C major scale, up and down", "Left-right ladder"] },
+  { t: "Your first tunes", p: [
+    "Start with Hot Cross Buns, which only uses three keys, then Mary Had a Little Lamb, then Twinkle, Twinkle, Little Star.",
+    "For each one: tap Hear song to learn how it goes, slowing it down with Speed if you like. Then tap Follow me and play it on your own kalimba. Get the right keys first and worry about rhythm afterwards." ],
+    go: ["Hot Cross Buns", "Mary Had a Little Lamb", "Twinkle, Twinkle, Little Star"] },
+  { t: "Chords, glides and staying in tune", p: [
+    "Two keys side by side sound sweet together. Pluck both with one stroke of your thumb. Three neighbours in a row make a full chord.",
+    "For a glide, drag your nail across several keys in one smooth sweep toward the edge. Covering and uncovering the holes on the back with your fingers adds a gentle wobble to a ringing note.",
+    "Keys drift out of tune over time, especially on a new kalimba. Check them with the tuner every so often." ],
+    go: ["C chord arpeggios"], tuner: true }
+];
+LESSONS.forEach((L, k) => {
+  const sec = document.createElement("section"); sec.className = "lesson";
+  const step = document.createElement("span"); step.className = "step"; step.textContent = "Lesson " + (k + 1); sec.appendChild(step);
+  const h = document.createElement("h2"); h.textContent = L.t; sec.appendChild(h);
+  L.p.forEach(t => { const p = document.createElement("p"); p.textContent = t; sec.appendChild(p); });
+  if (L.fig) { const f = document.createElement("div"); f.className = "tstrip"; f.setAttribute("aria-hidden", "true"); const els = miniBoard(f, "span"); if (k === 0) els[8].classList.add("hi"); sec.appendChild(f); }
+  if (L.go || L.tuner) {
+    const row = document.createElement("div"); row.className = "row";
+    (L.go || []).forEach(title => {
+      const i = SONGS.findIndex(s => s.t === title); if (i < 0) return;
+      const b = document.createElement("button"); b.className = "pill ghost"; b.textContent = "Practice: " + title;
+      b.addEventListener("click", () => openSong(i)); row.appendChild(b);
+    });
+    if (L.tuner) { const b = document.createElement("button"); b.className = "pill ghost"; b.textContent = "Open the tuner"; b.addEventListener("click", () => show("tuner")); row.appendChild(b); }
+    sec.appendChild(row);
+  }
+  $("lessons").appendChild(sec);
+});
+
+renderLibrary(); paintStrip();
 </script>
 </body></html>
