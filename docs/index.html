@@ -95,7 +95,7 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .ctl.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
 .ctl.primary svg { color: var(--accent-fg); }
 
-.board { flex: none; height: clamp(190px, 44%, 360px); position: relative; background: linear-gradient(180deg, var(--wood-1), var(--wood-2)); border-radius: 18px 18px 0 0; padding-top: 12px; padding-bottom: 10px; touch-action: none; user-select: none; -webkit-user-select: none; }
+.board { flex: none; height: clamp(190px, 46%, 380px); position: relative; background: linear-gradient(180deg, var(--wood-1), var(--wood-2)); border-radius: 0 0 18px 18px; padding-top: 12px; padding-bottom: 10px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .board::before { content: ""; position: absolute; left: 0; right: 0; top: 26px; height: 9px; background: var(--bridge); box-shadow: 0 2px 3px rgba(0,0,0,.35); z-index: 2; pointer-events: none; }
 .tines { height: 100%; max-width: 720px; margin: 0 auto; display: flex; gap: 2px; align-items: flex-start; }
 .tine { flex: 1; min-width: 0; height: 100%; background: none; border: 0; padding: 0; display: flex; align-items: flex-start; position: relative; }
@@ -132,6 +132,7 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
     <button class="listen" id="btn-listen" hidden aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg><span id="lbl-listen">Listen</span><i class="lvl" id="lvl"></i></button>
   </div>
   <div class="progress"><i id="prog"></i></div>
+  <div class="board gutter" id="board"><div class="tines" id="tines"></div></div>
   <div id="score" class="gutter"></div>
   <div class="controls gutter">
     <button class="ctl" id="btn-start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M19 5l-9 7 9 7z"/></svg>Start</button>
@@ -141,7 +142,6 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
     <button class="ctl" id="btn-speed" aria-label="Playback speed"><b id="lbl-speed">100%</b>Speed</button>
     <button class="ctl" id="btn-mute"><svg id="ico-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9a4 4 0 010 6"/></svg><span id="lbl-mute">Sound</span></button>
   </div>
-  <div class="board gutter" id="board"><div class="tines" id="tines"></div></div>
 </div>
 
 <script>
