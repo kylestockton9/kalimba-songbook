@@ -90,13 +90,21 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .pill { border: 1px solid var(--accent); background: var(--accent); color: var(--accent-fg); border-radius: 999px; padding: 9px 16px; font-weight: 700; min-height: 44px; }
 .pill.ghost { background: none; color: var(--accent); }
 
-.controls { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; padding-block: 8px; }
+.controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding-block: 8px; }
 .ctl { min-width: 0; min-height: 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 2px; font-size: 0.7rem; color: var(--muted); }
 .ctl svg { color: var(--fg); }
 .ctl b { font-family: var(--display); font-size: 0.95rem; color: var(--fg); height: 22px; display: grid; place-items: center; font-variant-numeric: tabular-nums; }
 .ctl.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
 .ctl.primary svg { color: var(--accent-fg); }
 
+@media (min-width: 600px) { .controls { grid-template-columns: repeat(8, 1fr); } }
+.vol { display: flex; align-items: center; gap: 12px; padding-block: 8px 0; }
+.vol input { flex: 1; min-width: 0; height: 36px; accent-color: var(--accent); }
+.vol output { font-family: var(--display); font-weight: 700; width: 3.2em; text-align: right; font-variant-numeric: tabular-nums; }
+.vol label { color: var(--muted); font-size: 0.85rem; }
+/* Order of the song screen. Default: kalimba on top. .board-bottom puts it under the notes. */
+#board { order: 1; } #mic-help { order: 2; } #score { order: 3; } #vol-panel { order: 4; } .controls { order: 5; }
+.board-bottom #board { order: 6; border-radius: 18px 18px 0 0; }
 .board { flex: none; height: clamp(190px, 46%, 380px); position: relative; background: linear-gradient(180deg, var(--wood-1), var(--wood-2)); border-radius: 0 0 18px 18px; padding-top: 12px; padding-bottom: 10px; touch-action: none; user-select: none; -webkit-user-select: none; }
 .board::before { content: ""; position: absolute; left: 0; right: 0; top: 26px; height: 9px; background: var(--bridge); box-shadow: 0 2px 3px rgba(0,0,0,.35); z-index: 2; pointer-events: none; }
 .tines { height: 100%; max-width: 720px; margin: 0 auto; display: flex; gap: 2px; align-items: flex-start; }
@@ -120,7 +128,7 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
   <div class="lib-inner gutter">
     <header class="lib-head">
       <h1>Kalimba Songbook</h1>
-      <p>For a 17-key kalimba tuned in C. Pick a tune and the key to play next lights up. Tap it, or press Play and follow along on your own kalimba.</p>
+      <p>For a 17-key kalimba tuned in C. Pick a tune and the key to play next lights up. Tap it on screen, or turn on the mic and the app follows along as you pluck your own kalimba. Hear song plays the tune for you.</p>
       <div class="tuning" id="tuning" aria-hidden="true"></div>
     </header>
     <div id="cats"></div>
@@ -131,19 +139,22 @@ button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
   <div class="bar-top gutter">
     <button class="icon-btn" id="btn-back" aria-label="Back to song list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
     <div class="now"><h2 id="now-title"></h2><span id="now-pos"></span></div>
-    <button class="listen" id="btn-listen" hidden aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg><span id="lbl-listen">Listen</span><i class="lvl" id="lvl"></i></button>
+    <button class="listen" id="btn-listen" hidden aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg><span id="lbl-listen">Use mic</span><i class="lvl" id="lvl"></i></button>
   </div>
   <div class="progress"><i id="prog"></i></div>
   <div class="board gutter" id="board"><div class="tines" id="tines"></div></div>
-  <div class="gutter" id="mic-help" hidden><p class="mic-help">Listening needs the microphone, which this page is not allowed to use. Open the web version in Chrome and tap Listen there: <a href="https://kylestockton9.github.io/kalimba-songbook/" target="_blank" rel="noopener">kylestockton9.github.io/kalimba-songbook</a></p></div>
+  <div class="gutter" id="mic-help" hidden><p class="mic-help">Listening needs the microphone, which this page is not allowed to use. Open the web version in Chrome and tap Use mic there: <a href="https://kylestockton9.github.io/kalimba-songbook/" target="_blank" rel="noopener">kylestockton9.github.io/kalimba-songbook</a></p></div>
   <div id="score" class="gutter"></div>
+  <div class="vol gutter" id="vol-panel" hidden><label for="vol">Volume</label><input type="range" id="vol" min="0" max="100" step="1" value="80"><output id="vol-out" for="vol">80%</output></div>
   <div class="controls gutter">
     <button class="ctl" id="btn-start"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M19 5l-9 7 9 7z"/></svg>Start</button>
     <button class="ctl" id="btn-phrase"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/></svg>Line</button>
     <button class="ctl" id="btn-prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg>Note</button>
-    <button class="ctl primary" id="btn-play"><svg id="ico-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg><span id="lbl-play">Play</span></button>
-    <button class="ctl" id="btn-speed" aria-label="Playback speed"><b id="lbl-speed">100%</b>Speed</button>
-    <button class="ctl" id="btn-mute"><svg id="ico-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9a4 4 0 010 6"/></svg><span id="lbl-mute">Sound</span></button>
+    <button class="ctl primary" id="btn-play"><svg id="ico-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg><span id="lbl-play">Hear song</span></button>
+    <button class="ctl" id="btn-speed" aria-label="Speed of Hear song"><b id="lbl-speed">100%</b>Speed</button>
+    <button class="ctl" id="btn-mute"><svg id="ico-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9a4 4 0 010 6"/></svg><span id="lbl-mute">Volume</span></button>
+    <button class="ctl" id="btn-flip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4L4 7M7 4l3 3M17 20V4M17 20l-3-3M17 20l3-3"/></svg>Flip layout</button>
+    <button class="ctl" id="btn-nextsong"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 5v14M5 5l9 7-9 7z"/></svg>Next song</button>
   </div>
 </div>
 
@@ -219,16 +230,18 @@ try { learned = JSON.parse(localStorage.getItem("kalimba-learned") || "{}") || {
 function saveLearned() { try { localStorage.setItem("kalimba-learned", JSON.stringify(learned)); } catch (e) {} }
 
 // ---------- sound ----------
-let ac = null, master = null, muted = false;
+let ac = null, master = null, volume = 0.8, boardTop = true;
+try { const v = parseFloat(localStorage.getItem("kalimba-volume")); if (v >= 0 && v <= 1) volume = v; boardTop = localStorage.getItem("kalimba-layout") !== "bottom"; } catch (e) {}
 function ensureAudio() {
   if (!ac) {
     ac = new (window.AudioContext || window.webkitAudioContext)();
-    master = ac.createDynamicsCompressor(); master.connect(ac.destination);
+    const comp = ac.createDynamicsCompressor(); comp.connect(ac.destination);
+    master = ac.createGain(); master.gain.value = volume; master.connect(comp);
   }
   if (ac.state === "suspended") ac.resume();
 }
 function pluck(n) {
-  if (muted || listening) return; // while listening the app stays silent so it cannot hear itself
+  if (volume <= 0 || listening) return; // while listening the app stays silent so it cannot hear itself
   try {
     ensureAudio();
     const t = ac.currentTime, f = freq(n);
@@ -312,7 +325,7 @@ async function startListening() {
     ensureAudio(); await ac.resume();
     micStream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
   } catch (e) {
-    micNote = "Microphone is blocked. Allow it in the browser's site settings, then tap Listen again.";
+    micNote = "Microphone is blocked. Allow it in the browser's site settings, then tap Use mic again.";
     showPos(); return;
   }
   micSrc = ac.createMediaStreamSource(micStream);
@@ -328,7 +341,7 @@ function stopListening() {
 function setListenUi() {
   $("btn-listen").classList.toggle("on", listening);
   $("btn-listen").setAttribute("aria-pressed", listening);
-  $("lbl-listen").textContent = listening ? "Listening" : "Listen";
+  $("lbl-listen").textContent = listening ? "Mic on" : "Use mic";
   if (!listening) $("lvl").style.opacity = "";
 }
 
@@ -389,6 +402,7 @@ function strike(i) {
 let song = null, songIndex = 0, idx = 0, chips = [], playing = false, timer = null, speed = 1, wake = null;
 
 function openSong(i) {
+  stop();
   songIndex = i; song = SONGS[i]; idx = 0;
   $("now-title").textContent = song.t;
   const sc = $("score"); sc.innerHTML = ""; chips = [];
@@ -465,7 +479,7 @@ function tick() {
 }
 function stop() { playing = false; clearTimeout(timer); setPlayUi(); }
 function setPlayUi() {
-  $("lbl-play").textContent = playing ? "Pause" : "Play";
+  $("lbl-play").textContent = playing ? "Stop" : "Hear song";
   $("ico-play").innerHTML = playing ? '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>' : '<path d="M7 4l13 8-13 8z"/>';
 }
 $("btn-back").addEventListener("click", closeSong);
@@ -482,11 +496,26 @@ $("btn-speed").addEventListener("click", () => {
   speed = SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length];
   $("lbl-speed").textContent = Math.round(speed * 100) + "%";
 });
-$("btn-mute").addEventListener("click", () => {
-  muted = !muted;
-  $("lbl-mute").textContent = muted ? "Muted" : "Sound";
-  $("ico-mute").innerHTML = muted ? '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/>' : '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9a4 4 0 010 6"/>';
+function setVolumeUi() {
+  const pct = Math.round(volume * 100);
+  $("vol").value = pct; $("vol-out").textContent = pct + "%";
+  $("ico-mute").innerHTML = volume <= 0 ? '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/>' : '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9a4 4 0 010 6"/>';
+}
+$("btn-mute").addEventListener("click", () => { $("vol-panel").hidden = !$("vol-panel").hidden; });
+$("vol").addEventListener("input", () => {
+  volume = $("vol").value / 100;
+  if (master) master.gain.value = volume;
+  setVolumeUi();
+  try { localStorage.setItem("kalimba-volume", volume); } catch (e) {}
 });
+$("vol").addEventListener("change", () => { pluck("C5"); }); // a test note at the new volume
+function setLayout() { $("player").classList.toggle("board-bottom", !boardTop); }
+$("btn-flip").addEventListener("click", () => {
+  boardTop = !boardTop; setLayout(); if (song) update();
+  try { localStorage.setItem("kalimba-layout", boardTop ? "top" : "bottom"); } catch (e) {}
+});
+$("btn-nextsong").addEventListener("click", () => openSong((songIndex + 1) % SONGS.length));
+setVolumeUi(); setLayout();
 $("btn-listen").hidden = false;
 $("btn-listen").addEventListener("click", () => {
   if (!canListen) { $("mic-help").hidden = !$("mic-help").hidden; return; }
